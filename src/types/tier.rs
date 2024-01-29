@@ -20,13 +20,6 @@ pub enum Tier {
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct TierPoint {
     pub user_addr: String,
-    pub points: i16,
-    pub points_type: PointType,
+    pub points: i64,
     pub created_at: i64,
-}
-
-#[derive(Debug, Clone, FromPrimitive, Serialize, Deserialize, ToSchema)]
-pub enum PointType {
-    ConnectionCompliment,
-    ConnectionPunishment,
 }
