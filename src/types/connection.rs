@@ -28,7 +28,9 @@ pub struct PeernodeInfo {
     pub rate_per_kb: u64,
     pub rate_per_second: u64,
     pub city_geoname_id: u32,
+    pub city_geoname_name: String,
     pub country_geoname_id: u32,
+    pub country_geoname_name: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
