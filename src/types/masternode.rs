@@ -21,7 +21,7 @@ pub struct AssignMasternodeRes {
     pub masternode: Option<MasternodeInfo>,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, ToSchema)]
 pub struct ActivePeersClients {
     pub active_peers: u32,
     pub active_clients: u32,
