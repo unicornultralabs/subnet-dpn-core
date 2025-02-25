@@ -114,6 +114,7 @@ pub struct Session {
     pub status: SessionStatus,
     pub reason: Option<SessionTerminationReason>,
     pub tx_hash: Option<H256>,
+    pub ip_peer_node_connected: Option<String>,
 }
 
 impl Session {
@@ -134,6 +135,7 @@ impl Session {
         status: SessionStatus,
         reason: Option<SessionTerminationReason>,
         tx_hash: Option<H256>,
+        ip_peer_node_connected: Option<String>,
     ) -> Self {
         Self {
             session_hash,
@@ -152,6 +154,7 @@ impl Session {
             status,
             reason,
             tx_hash,
+            ip_peer_node_connected,
         }
     }
 }
