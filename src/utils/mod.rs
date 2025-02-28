@@ -30,3 +30,10 @@ pub fn u256_to_szabo(value: U256) -> i64 {
 pub fn szabo_to_u256(value: i64) -> U256 {
     U256::from(parse_units(value, "szabo").unwrap())
 }
+
+pub fn u256_to_ether(value: U256) -> f64 {
+    format_units(value, "ether")
+        .unwrap()
+        .parse::<f64>()
+        .unwrap()
+}
