@@ -25,7 +25,8 @@ pub struct EphemeralSession {
     pub bandwidth_usage: u64,
     pub handshaked_at: i64,
     pub end_at: i64,
-    pub login_session_id: String
+    pub login_session_id: String,
+    pub provider_country_id: u64,
 }
 
 impl EphemeralSession {
@@ -35,7 +36,8 @@ impl EphemeralSession {
         peer_addr: String,
         rate_per_kb: u64,
         rate_per_second: u64,
-        login_session_id: String
+        login_session_id: String,
+        provider_country_id: u64,
     ) -> Self {
         let handshaked_at_micros = Utc::now().timestamp_micros();
 
@@ -49,7 +51,8 @@ impl EphemeralSession {
             bandwidth_usage: 0,
             handshaked_at: handshaked_at_micros,
             end_at: handshaked_at_micros,
-            login_session_id: login_session_id
+            login_session_id: login_session_id,
+            provider_country_id: provider_country_id,
         };
 
         let proto: ProtoSession = _self.clone().into();
@@ -111,6 +114,7 @@ pub struct Session {
     pub status: SessionStatus,
     pub reason: Option<SessionTerminationReason>,
     pub tx_hash: Option<H256>,
+    pub provider_country_id: Option<i64>,
 }
 
 impl Session {
@@ -131,6 +135,7 @@ impl Session {
         status: SessionStatus,
         reason: Option<SessionTerminationReason>,
         tx_hash: Option<H256>,
+        provider_country_id: Option<i64>,
     ) -> Self {
         Self {
             session_hash,
@@ -149,6 +154,7 @@ impl Session {
             status,
             reason,
             tx_hash,
+            provider_country_id,
         }
     }
 }
