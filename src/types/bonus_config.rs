@@ -1,3 +1,6 @@
+use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
+
 #[derive(Deserialize, Serialize, Clone, Debug, ToSchema)]
 pub struct BonusConfig {
     country_geoname_id: i32,
