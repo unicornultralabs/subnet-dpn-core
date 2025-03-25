@@ -20,3 +20,4 @@ pub mod user;
 pub mod user_xp;
 pub mod user_online_point;
 pub mod vpn_user;
+pub mod bonus_config;
