@@ -14,6 +14,7 @@ pub const TXS_EXCHANGE: &str = "dpn-txs";
 pub const WITHDRAWALS_EXCHANGE: &str = "dpn-withdrawals";
 pub const BALANCES_EXCHANGE: &str = "dpn-balances";
 pub const NOTIFICATION_EXCHANGE: &str = "dpn-notifications";
+pub const WITHDRAWALS_EXCHANGE_V2: &str = "dpn-withdrawals-v2";
 // queues
 pub const CONNECTION_EVENTS_ADMIN_QUEUE: &str = "connection-events_admin";
 pub const CONNECTION_EVENTS_EXPLORER_QUEUE: &str = "connection-events_explorer";
@@ -26,6 +27,7 @@ pub const STATS_WEBSOCKET_QUEUE: &str = "stats_websocket";
 pub const TXS_ADMIN_QUEUE: &str = "txs_admin";
 pub const TXS_EXPLORER_QUEUE: &str = "txs_explorer";
 pub const TXS_ONCHAIN_QUEUE: &str = "txs_onchain";
+pub const TXS_ONCHAIN_QUEUE_V2: &str = "txs_onchain_v2";
 pub const BALANCES_QUEUE: &str = "balances";
 pub const TAPPOINT_EVENT_QUEUE: &str = "tappoint-events_admin";
 pub const NOTIFICATION_REGISTER_QUEUE: &str = "notification-register_admin";
