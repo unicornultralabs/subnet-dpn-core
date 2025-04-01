@@ -23,5 +23,5 @@ pub struct RewardsOverviewV2 {
     /// u2u_dpn token balance 
     pub u2u_dpn_balance: i64,
     /// u2u  token balance 
-    pub u2u_dpn_balance: i64,
+    pub u2u_balance: i64,
 }
