@@ -488,4 +488,8 @@ impl DPNRedisKey {
     pub fn get_price_chan() -> String {
         "price_updated".to_string()
     }
+
+    pub fn get_bonus_config_hash_key() -> String {
+        "bonus_config".to_string()
+    }
 }
