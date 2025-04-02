@@ -11,6 +11,7 @@ use crate::utils::{bytes_to_hex_string, hash::hash, u256_to_szabo};
 pub enum TxType {
     Deposit,
     Withdrawal,
+    WithdrawalV2,
 }
 
 #[derive(Debug, Clone, FromPrimitive, Serialize, Deserialize, ToSchema)]
