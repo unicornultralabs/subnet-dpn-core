@@ -115,6 +115,30 @@ impl RedisService {
         }
     }
 
+    pub fn hset_with_ttl<T>(self: Arc<Self>, key: String, field: String, obj: T, ttl_seconds: u64) -> Result<(), Error>
+    where
+        T: Serialize,
+    {
+        let mut conn = self
+            .client
+            .get_connection()
+            .map_err(|e| anyhow!("cannot get connection err={}", e))?;
+        
+        // First set the hash field
+        conn.hset::<String, String, String, usize>(
+            key.clone(),
+            field,
+            serde_json::to_string(&obj).unwrap(),
+        )
+        .map_err(|e| anyhow!("redis failed to insert err={}", e))?;
+        
+        // Then set the expiration on the entire hash key
+        conn.expire::<String, bool>(key.clone(), ttl_seconds as usize)
+            .map_err(|e| anyhow!("redis failed to set expiration on key={} err={}", key, e))?;
+        
+        Ok(())
+    }
+    
     pub fn hget<T>(self: Arc<Self>, key: String, field: String) -> Result<T, Error>
     where
         T: Clone + DeserializeOwned,
