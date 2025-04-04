@@ -133,7 +133,7 @@ impl RedisService {
         .map_err(|e| anyhow!("redis failed to insert err={}", e))?;
         
         // Then set the expiration on the entire hash key
-        conn.expire::<String, bool>(key.clone(), ttl_seconds as usize)
+        conn.expire::<String, bool>(key.clone(), ttl_seconds as i64)
             .map_err(|e| anyhow!("redis failed to set expiration on key={} err={}", key, e))?;
         
         Ok(())
