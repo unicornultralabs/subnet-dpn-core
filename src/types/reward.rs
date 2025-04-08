@@ -37,3 +37,11 @@ pub struct RewardsOverviewV2 {
     /// claimed + unclaimed
     pub total_commission_rewards: i64,
 }
+
+
+#[derive(Debug, Clone, Serialize, ToSchema)]
+pub struct ConnectionOverviewV2 {
+    pub total_bandwidth_served: i64,
+    pub total_rewards: i64,
+    pub total_rewards_v2: i64,
+}
