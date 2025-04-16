@@ -19,6 +19,7 @@ pub enum InternalTxType {
     Commission,
     PlatformFee,
     ReferralFee,
+    ReferralFeeV2,
     Transfer,
 }
 
