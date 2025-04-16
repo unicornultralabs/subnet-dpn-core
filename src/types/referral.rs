@@ -43,3 +43,19 @@ pub struct ReferralsOverview {
     // unclaimed commision earned from referees
     pub unclaimed_commission: i64,
 }
+
+
+#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+pub struct ReferralsOverviewV2 {
+    pub total_referees: i64,
+    // number of commission transactions from referees
+    pub total_commission_txs: i64,
+    // commision earned from referees
+    pub total_commision: i64,
+    // unclaimed commision earned from referees
+    pub unclaimed_commission: i64,
+    // commision earned from referees
+    pub total_commision_v2: i64,
+    // unclaimed commision earned from referees
+    pub unclaimed_commission_v2: i64,
+}
