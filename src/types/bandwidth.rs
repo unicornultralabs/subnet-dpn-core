@@ -21,12 +21,11 @@ pub struct EphemeralSession {
     pub client_addr: String,
     pub peer_addr: String,
     pub rate_per_kb: u64,
-    pub rate_per_kb_v2: u64,
+    pub rate_per_second: u64,
     pub bandwidth_usage: u64,
     pub handshaked_at: i64,
     pub end_at: i64,
     pub login_session_id: String,
-    pub provider_country_id: u64,
 }
 
 impl EphemeralSession {
@@ -35,9 +34,8 @@ impl EphemeralSession {
         client_addr: String,
         peer_addr: String,
         rate_per_kb: u64,
-        rate_per_kb_v2: u64,
+        rate_per_second: u64,
         login_session_id: String,
-        provider_country_id: u64,
     ) -> Self {
         let handshaked_at_micros = Utc::now().timestamp_micros();
 
@@ -47,12 +45,11 @@ impl EphemeralSession {
             client_addr,
             peer_addr,
             rate_per_kb,
-            rate_per_kb_v2,
+            rate_per_second,
             bandwidth_usage: 0,
             handshaked_at: handshaked_at_micros,
             end_at: handshaked_at_micros,
             login_session_id: login_session_id,
-            provider_country_id: provider_country_id,
         };
 
         let proto: ProtoSession = _self.clone().into();
