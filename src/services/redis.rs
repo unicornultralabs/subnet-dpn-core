@@ -323,8 +323,11 @@ impl RedisService {
             PeerChanged::Connected(info) => {
                 // add peer to redis hash
                 let (k, f) = DPNRedisKey::get_peers_kf(masternode_id.clone(), info.ip_u32);
+                println!("redis peer add k={} f={}", k, f);
                 if let Err(e) = self.clone().hset(k, f, info.clone()) {
                     return Err(anyhow!("redis peer add failed err={}", e));
+                }else {
+                    println!("redis peer add success k={} f={}", k, f);
                 }
             }
             PeerChanged::Disconnected(info) => {
