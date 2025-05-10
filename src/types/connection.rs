@@ -2,7 +2,7 @@ use dpn_proto::proxy_acc::ProtoProxyAcc;
 use num_derive::FromPrimitive;
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
-
+use bitcodec::{Decode, Encode};
 use crate::utils::{bytes_to_hex_string, hash::hash};
 
 pub const DEFAULT_IP_ROTATION_PERIOD: i64 = 300;
@@ -32,7 +32,7 @@ pub struct PeernodeInfo {
     pub country_geoname_id: u32,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Encode, Decode)]
 pub struct PeerStats {
     pub masternode_id: String,
     pub session_hash: String,
