@@ -2,7 +2,7 @@ use dpn_proto::proxy_acc::ProtoProxyAcc;
 use num_derive::FromPrimitive;
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
-use bitcodec::{Decode, Encode};
+use::bitcode::{Decode, Encode};
 use crate::utils::{bytes_to_hex_string, hash::hash};
 
 pub const DEFAULT_IP_ROTATION_PERIOD: i64 = 300;
