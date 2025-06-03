@@ -85,6 +85,8 @@ pub struct PeerConnectedExtra {
     pub peer_addr: String,
     pub login_session_id: String,
     pub info: PeernodeInfo,
+    pub peer_ip_u32: u32,
+
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -92,6 +94,8 @@ pub struct PeerDisconnectedExtra {
     pub masternode_id: String,
     pub peer_addr: String,
     pub login_session_id: String,
+    pub peer_ip_u32: u32,
+
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
