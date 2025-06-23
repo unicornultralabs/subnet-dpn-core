@@ -7,9 +7,9 @@ use serde::Serialize;
 use std::{collections::HashMap, fmt::Debug, sync::Arc};
 use url::Url;
 
-use crate::types::{bandwidth::UserBandwidthPrice, connection::ProxyAccData};
+use crate::types::{bandwidth::UserBandwidthPrice, connection::ProxyAccData, task::UserTask};
 
-use super::types::{PeerChanged, PeerChangedInfo, ProxyAccChanged, UserTask};
+use super::types::{PeerChanged, PeerChangedInfo, ProxyAccChanged};
 
 struct RedisUri {
     is_tls: bool,
@@ -408,8 +408,7 @@ impl RedisService {
             .await
             .map_err(|e| {
                 anyhow!(
-                    "redis peer status publish failed price={:?} err={}",
-                    price,
+                    "redis first time provider publish failed err={}",
                     e
                 )
             })?;
