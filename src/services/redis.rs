@@ -516,4 +516,8 @@ impl DPNRedisKey {
     pub fn get_bonus_config_hash_key() -> String {
         "bonus_config".to_string()
     }
+    
+    pub fn get_first_time_provider_kf(id: String) -> (String, String) {
+        ("first_time_provider".to_owned(), id)
+    }
 }
