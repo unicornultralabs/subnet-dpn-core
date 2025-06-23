@@ -9,7 +9,7 @@ use url::Url;
 
 use crate::types::{bandwidth::UserBandwidthPrice, connection::ProxyAccData};
 
-use super::types::{PeerChanged, PeerChangedInfo, ProxyAccChanged};
+use super::types::{PeerChanged, PeerChangedInfo, ProxyAccChanged, UserTask};
 
 struct RedisUri {
     is_tls: bool,
@@ -543,5 +543,9 @@ impl DPNRedisKey {
 
     pub fn get_first_time_provider_kf(id: String) -> (String, String) {
         ("first_time_provider".to_owned(), id)
+    }
+
+    pub fn get_first_time_provider_chan() -> String {
+        "first_time_provider_updated".to_string()
     }
 }
