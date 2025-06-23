@@ -56,6 +56,9 @@ pub enum DPNEvent {
     Deposit(DepositExtra),
     Withdrawal(WithdrawalExtra),
     Referral(ReferralExtra),
+
+    // quest
+    QuestCompleted(QuestCompletedExtra),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -140,4 +143,10 @@ pub enum DPNTx {
 #[derive(Debug, Clone, Serialize)]
 pub enum NotificationEvent {
     Register(NotificationRegister),
+}
+
+#[derive(Debug, Clone, Serialize)]
+pub struct QuestCompletedExtra{
+    pub user_addr: String,
+    pub amount: u64,
 }
