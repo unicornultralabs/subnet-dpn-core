@@ -21,6 +21,7 @@ pub enum InternalTxType {
     ReferralFee,
     ReferralFeeV2,
     Transfer,
+    Quest,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
