@@ -391,6 +391,30 @@ impl RedisService {
         Ok(())
     }
 
+    pub async fn publish_first_time_provider(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        let (k, f) = DPNRedisKey::get_first_time_provider_kf(provider.user_addr.clone());
+        self.clone()
+            .hset(k, f, provider.clone())
+            .map_err(|e| anyhow!("redis set first time provider failed err={}", e))?;
+
+        self.clone()
+            .publish(
+                DPNRedisKey::get_first_time_provider_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis peer status publish failed price={:?} err={}",
+                    price,
+                    e
+                )
+            })?;
+        Ok(())
+    }
     pub async fn get_peers_price(self: Arc<Self>) -> Result<Vec<UserBandwidthPrice>> {
         let (k, _) = DPNRedisKey::get_price_kf("".to_string());
         let peers = self
@@ -516,7 +540,7 @@ impl DPNRedisKey {
     pub fn get_bonus_config_hash_key() -> String {
         "bonus_config".to_string()
     }
-    
+
     pub fn get_first_time_provider_kf(id: String) -> (String, String) {
         ("first_time_provider".to_owned(), id)
     }
