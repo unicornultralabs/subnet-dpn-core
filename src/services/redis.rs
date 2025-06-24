@@ -547,4 +547,8 @@ impl DPNRedisKey {
     pub fn get_first_time_provider_chan() -> String {
         "first_time_provider_updated".to_string()
     }
+    
+    pub fn get_withdrawal_reward_chan() -> String {
+        "withdrawal_reward_updated".to_string()
+    }
 }
