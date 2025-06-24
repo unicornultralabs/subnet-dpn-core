@@ -445,6 +445,16 @@ impl RedisService {
             .map_err(|e| anyhow!("failed to remove peers from redis err={}", e))
     }
 
+    /// remove all withdrawal reward in redis cache
+    /// it must be called when admin started
+    /// after removal, withdrawal reward are loaded from db and added to redis
+    pub async fn remove_all_withdrawal_reward(self: Arc<Self>) -> anyhow::Result<()> {
+        let (k, _) = DPNRedisKey::get_withdrawal_reward_kf("".to_owned());
+        self.clone()
+            .del(k)
+            .map_err(|e| anyhow!("failed to remove withdrawal reward from redis err={}", e))
+    }
+    
     pub async fn publish_proxy_acc(
         self: Arc<Self>,
         proxy_acc_changed: ProxyAccChanged,
@@ -547,7 +557,11 @@ impl DPNRedisKey {
     pub fn get_first_time_provider_chan() -> String {
         "first_time_provider_updated".to_string()
     }
-    
+
+    pub fn get_withdrawal_reward_kf(id: String) -> (String, String) {
+        ("withdrawal_reward".to_owned(), id)
+    }
+
     pub fn get_withdrawal_reward_chan() -> String {
         "withdrawal_reward_updated".to_string()
     }
