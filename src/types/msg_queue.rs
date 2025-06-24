@@ -145,7 +145,7 @@ pub enum NotificationEvent {
     Register(NotificationRegister),
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct QuestCompletedExtra{
     pub user_addr: String,
     pub amount: u64,
