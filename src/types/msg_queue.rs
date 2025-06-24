@@ -40,6 +40,7 @@ pub const SESSION_ROUTING_KEY: &str = "session";
 pub const TXS_ROUTING_KEY: &str = "txs";
 pub const TAPPOINT_EVENT_ROUTING_KEY: &str = "tappoint";
 pub const NOTIFICATION_REGISTER_ROUTING_KEY: &str = "register";
+pub const QUEST_ROUTING_KEY: &str = "quest";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 
