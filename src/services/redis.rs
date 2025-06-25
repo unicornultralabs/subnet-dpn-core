@@ -439,6 +439,30 @@ impl RedisService {
         Ok(())
     }
 
+    pub async fn publish_completed_8_hours_ot(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        let (k, f) = DPNRedisKey::get_completed_8_hours_ot_kf(provider.user_addr.clone());
+        self.clone()
+            .hset(k, f, provider.clone())
+            .map_err(|e| anyhow!("redis set completed 8 hours ot failed err={}", e))?;
+
+        self.clone()
+            .publish(
+                DPNRedisKey::get_completed_8_hours_ot_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis completed 8 hours ot publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
     pub async fn get_peers_price(self: Arc<Self>) -> Result<Vec<UserBandwidthPrice>> {
         let (k, _) = DPNRedisKey::get_price_kf("".to_string());
         let peers = self
