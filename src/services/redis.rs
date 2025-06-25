@@ -591,11 +591,11 @@ impl DPNRedisKey {
         "withdrawal_reward_updated".to_string()
     }
 
-    pub fn get_completed_8_hours_dl_kf(id: String) -> (String, String) {
-        ("completed_8_hours_dl".to_owned(), id)
+    pub fn get_completed_8_hours_ot_kf(id: String) -> (String, String) {
+        ("completed_8_hours_ot".to_owned(), id)
     }
 
-    pub fn get_completed_8_hours_dl_chan() -> String {
+    pub fn get_completed_8_hours_ot_chan() -> String {
         "completed_8_hours_dl_updated".to_string()
     }
 
