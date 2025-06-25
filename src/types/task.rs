@@ -8,4 +8,5 @@ use utoipa::ToSchema;
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct UserTask {
     pub user_addr: String,
+    pub num_of : i32,
 }
