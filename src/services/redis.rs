@@ -462,6 +462,25 @@ impl RedisService {
             })?;
         Ok(())
     }
+    
+    pub async fn publish_invite_friend_one_time(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        self.clone()
+            .publish(
+                DPNRedisKey::get_invite_friend_one_time_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis invite friend one time publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
 
     pub async fn get_peers_price(self: Arc<Self>) -> Result<Vec<UserBandwidthPrice>> {
         let (k, _) = DPNRedisKey::get_price_kf("".to_string());
@@ -621,6 +640,14 @@ impl DPNRedisKey {
 
     pub fn get_completed_8_hours_ot_chan() -> String {
         "completed_8_hours_dl_updated".to_string()
+    }
+
+    pub fn get_invite_friend_one_time_kf(id: String) -> (String, String) {
+        ("invite_friend_one_time".to_owned(), id)
+    }
+
+    pub fn get_invite_friend_one_time_chan() -> String {
+        "invite_friend_one_time_updated".to_string()
     }
 
 
