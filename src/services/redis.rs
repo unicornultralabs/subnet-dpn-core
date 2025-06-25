@@ -414,6 +414,31 @@ impl RedisService {
             })?;
         Ok(())
     }
+
+    pub async fn publish_withdrawal_reward(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        let (k, f) = DPNRedisKey::get_withdrawal_reward_kf(provider.user_addr.clone());
+        self.clone()
+            .hset(k, f, provider.clone())
+            .map_err(|e| anyhow!("redis set withdrawal reward failed err={}", e))?;
+
+        self.clone()
+            .publish(
+                DPNRedisKey::get_withdrawal_reward_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis first time provider publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
     pub async fn get_peers_price(self: Arc<Self>) -> Result<Vec<UserBandwidthPrice>> {
         let (k, _) = DPNRedisKey::get_price_kf("".to_string());
         let peers = self
