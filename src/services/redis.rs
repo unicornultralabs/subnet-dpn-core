@@ -489,6 +489,9 @@ impl RedisService {
         provider: UserTask,
     ) -> anyhow::Result<()> {
         self.clone()
+        .hset(k, f, provider.clone())
+        .map_err(|e| anyhow!("redis set completed 8 hours ot failed err={}", e))?;
+        self.clone()
             .publish(
                 DPNRedisKey::get_invite_friend_one_time_chan(),
                 serde_json::to_string(&provider).unwrap(),
@@ -501,6 +504,22 @@ impl RedisService {
                 )
             })?;
         Ok(())
+    }
+
+    pub async fn publish_completed_time_per_day(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        let (k, f) = DPNRedisKey::get_completed_time_per_day_kf(provider.user_addr.clone());
+        self.clone()
+        .hset(k, f, provider.clone())
+        .map_err(|e| anyhow!("redis set completed time per day failed err={}", e))?;
+        self.clone()
+            .publish(
+                DPNRedisKey::get_completed_time_per_day_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
     }
 
     pub async fn get_peers_price(self: Arc<Self>) -> Result<Vec<UserBandwidthPrice>> {
@@ -671,13 +690,21 @@ impl DPNRedisKey {
         "invite_friend_one_time_updated".to_string()
     }
 
-    pub fn get_total_refers_one_time_kf(id: String) -> (String, String) {
-        ("total_refers_one_time".to_owned(), id)
+    pub fn get_completed_time_per_day_kf(id: String) -> (String, String) {
+        ("completed_time_per_day".to_owned(), id)
+    }
+    
+    pub fn get_completed_time_per_day_chan() -> String {
+        "completed_time_per_day_updated".to_string()
     }
 
-    pub fn get_total_refers_one_time_chan() -> String {
-        "total_refers_one_time_updated".to_string()
-    }
+    // pub fn get_total_refers_one_time_kf(id: String) -> (String, String) {
+    //     ("total_refers_one_time".to_owned(), id)
+    // }
+
+    // pub fn get_total_refers_one_time_chan() -> String {
+    //     "total_refers_one_time_updated".to_string()
+    // }
 
 
 }
