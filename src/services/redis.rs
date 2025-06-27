@@ -463,26 +463,7 @@ impl RedisService {
         Ok(())
     }
     
-    pub async fn publish_total_refers_one_time(
-        self: Arc<Self>,
-        provider: UserTask,
-    ) -> anyhow::Result<()> {
-        let (k, f) = DPNRedisKey::get_total_refers_one_time_kf(provider.user_addr.clone());
 
-        self.clone()
-            .publish(
-                DPNRedisKey::get_total_refers_one_time_chan(),
-                serde_json::to_string(&provider).unwrap(),
-            )
-            .await
-            .map_err(|e| {
-                anyhow!(
-                    "redis total refers one time publish failed err={}",
-                    e
-                )
-            })?;
-        Ok(())
-    }
 
     pub async fn publish_invite_friend_one_time(
         self: Arc<Self>,
