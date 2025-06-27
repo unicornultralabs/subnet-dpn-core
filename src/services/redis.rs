@@ -470,9 +470,6 @@ impl RedisService {
         provider: UserTask,
     ) -> anyhow::Result<()> {
         self.clone()
-        .hset(k, f, provider.clone())
-        .map_err(|e| anyhow!("redis set completed 8 hours ot failed err={}", e))?;
-        self.clone()
             .publish(
                 DPNRedisKey::get_invite_friend_one_time_chan(),
                 serde_json::to_string(&provider).unwrap(),
