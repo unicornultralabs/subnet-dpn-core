@@ -676,6 +676,10 @@ impl DPNRedisKey {
         "completed_time_per_day_updated".to_string()
     }
 
+    pub fn get_user_addr_geo_kf(user_addr: String) -> (String, String) {
+        ("user_addr_geo".to_owned(), user_addr)
+    }
+
     // pub fn get_total_refers_one_time_kf(id: String) -> (String, String) {
     //     ("total_refers_one_time".to_owned(), id)
     // }
