@@ -484,6 +484,26 @@ impl RedisService {
         Ok(())
     }
 
+    pub async fn publish_completed_provider_streak(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        self.clone()
+            .publish(
+                DPNRedisKey::get_completed_provider_streak_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis completed provider streak publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
+
     pub async fn publish_completed_time_per_day(
         self: Arc<Self>,
         provider: UserTask,
@@ -678,6 +698,10 @@ impl DPNRedisKey {
 
     pub fn get_user_addr_geo_kf(user_addr: String) -> (String, String) {
         ("user_addr_geo".to_owned(), user_addr)
+    }
+
+    pub fn get_completed_provider_streak_chan() -> String {
+        "completed_provider_streak_updated".to_string()
     }
 
     // pub fn get_total_refers_one_time_kf(id: String) -> (String, String) {
