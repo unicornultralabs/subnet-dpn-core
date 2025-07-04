@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
+use serde_with::{serde_as, DisplayFromStr};
 use utoipa::ToSchema;
-
 #[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
 pub struct PartnerConfig {
     pub id: String,
@@ -53,6 +53,7 @@ impl PartnerConfig {
     }
 }
 
+#[serde_as]
 #[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
 pub struct PartnerConfigQuery {
     pub throughput_from: Option<f64>,
@@ -61,7 +62,10 @@ pub struct PartnerConfigQuery {
     pub packet_loss_from: Option<f64>,
     pub packet_loss_to: Option<f64>,
 
+    #[serde_as(as = "Option<DisplayFromStr>")]
     pub jitter_from: Option<u128>,
+
+    #[serde_as(as = "Option<DisplayFromStr>")]
     pub jitter_to: Option<u128>,
 }
 
