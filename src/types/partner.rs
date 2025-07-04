@@ -1,0 +1,115 @@
+use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
+
+#[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
+pub struct PartnerConfig {
+    pub id: String,
+    pub partner_name: String,
+
+    pub throughput_from: Option<f64>,
+    pub throughput_to: Option<f64>,
+
+    pub packet_loss_from: Option<f64>,
+    pub packet_loss_to: Option<f64>,
+
+    pub jitter_from: Option<u128>,
+    pub jitter_to: Option<u128>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
+pub struct NewPartnerConfig {
+    pub partner_name: String,
+    pub throughput_from: Option<f64>,
+    pub throughput_to: Option<f64>,
+
+    pub packet_loss_from: Option<f64>,
+    pub packet_loss_to: Option<f64>,
+
+    pub jitter_from: Option<u128>,
+    pub jitter_to: Option<u128>,
+}
+
+impl PartnerConfig {
+    pub fn new(
+        id: String,
+        partner_name: String,
+        throughput_from: Option<f64>,
+        throughput_to: Option<f64>,
+        packet_loss_from: Option<f64>,
+        packet_loss_to: Option<f64>,
+        jitter_from: Option<u128>,
+        jitter_to: Option<u128>,
+    ) -> Self {
+        Self {
+            id,
+            partner_name,
+            throughput_from,
+            throughput_to,
+            packet_loss_from,
+            packet_loss_to,
+            jitter_from,
+            jitter_to,
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
+pub struct PartnerConfigQuery {
+    pub throughput_from: Option<f64>,
+    pub throughput_to: Option<f64>,
+
+    pub packet_loss_from: Option<f64>,
+    pub packet_loss_to: Option<f64>,
+
+    pub jitter_from: Option<u128>,
+    pub jitter_to: Option<u128>,
+}
+
+#[derive(Deserialize, Clone)]
+pub struct PartnerConfigPath {
+    pub partner: String,
+}
+
+impl PartnerConfigQuery {
+    pub fn to_query_string(&self) -> String {
+        let mut params = vec![];
+
+        if let Some(val) = self.throughput_from {
+            params.push(format!("throughput_from={}", val));
+        }
+        if let Some(val) = self.throughput_to {
+            params.push(format!("throughput_to={}", val));
+        }
+        if let Some(val) = self.packet_loss_from {
+            params.push(format!("packet_loss_from={}", val));
+        }
+        if let Some(val) = self.packet_loss_to {
+            params.push(format!("packet_loss_to={}", val));
+        }
+        if let Some(val) = self.jitter_from {
+            params.push(format!("jitter_from={}", val));
+        }
+        if let Some(val) = self.jitter_to {
+            params.push(format!("jitter_to={}", val));
+        }
+
+        if params.is_empty() {
+            "".to_string()
+        } else {
+            format!("?{}", params.join("&"))
+        }
+    }
+}
+
+impl Into<PartnerConfigQuery> for PartnerConfig {
+    fn into(self) -> PartnerConfigQuery {
+        PartnerConfigQuery {
+            throughput_from: self.throughput_from,
+            throughput_to: self.throughput_to,
+            packet_loss_from: self.packet_loss_from,
+            packet_loss_to: self.packet_loss_to,
+            jitter_from: self.jitter_from,
+            jitter_to: self.jitter_to,
+        }
+    }
+}

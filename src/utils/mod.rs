@@ -1,5 +1,4 @@
 pub mod hash;
-
 use ethers::utils::{format_units, parse_units};
 use hex::encode;
 pub use web3::types::{
