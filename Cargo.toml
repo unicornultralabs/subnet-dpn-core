@@ -37,3 +37,10 @@ utoipa-swagger-ui = { version = "5.0.0", features = ["actix-web"] }
 maxminddb = "0.24.0"
 bitcode = "=0.6.5"
 serde_with = "3.14.0"
+
+sqlx = { version = "0.7.3", default-features = false, features = [
+    "runtime-tokio",
+    "postgres",
+    "json",
+    "macros",
+] }
