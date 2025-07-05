@@ -18,21 +18,27 @@ pub struct PartnerConfigCondition {
 pub struct PartnerConfig {
     pub id: String,
     pub partner_name: String,
-    pub conditions: PartnerConfigCondition,
+    pub conditions: Option<PartnerConfigCondition>,
+}
+#[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
+pub struct PartnerConfigInsert {
+    pub id: String,
+    pub partner_name: String,
+    pub conditions: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, ToSchema, sqlx::FromRow)]
 pub struct NewPartnerConfig {
     pub partner_name: String,
-    pub requirement: PartnerConfigCondition,
+    pub conditions: PartnerConfigCondition,
 }
 
 impl PartnerConfig {
-    pub fn new(id: String, partner_name: String, requirement: PartnerConfigCondition) -> Self {
+    pub fn new(id: String, partner_name: String, conditions: PartnerConfigCondition) -> Self {
         Self {
             id,
             partner_name,
-            conditions: requirement,
+            conditions: Some(conditions),
         }
     }
 }
@@ -85,6 +91,19 @@ impl PartnerConfigQuery {
             "".to_string()
         } else {
             format!("?{}", params.join("&"))
+        }
+    }
+}
+
+impl Into<PartnerConfigQuery> for PartnerConfigCondition {
+    fn into(self) -> PartnerConfigQuery {
+        PartnerConfigQuery {
+            throughput_from: self.throughput_from,
+            throughput_to: self.throughput_to,
+            packet_loss_from: self.packet_loss_from,
+            packet_loss_to: self.packet_loss_to,
+            jitter_from: self.jitter_from,
+            jitter_to: self.jitter_to,
         }
     }
 }
