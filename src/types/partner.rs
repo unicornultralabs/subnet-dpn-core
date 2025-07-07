@@ -20,18 +20,6 @@ pub struct PartnerConfig {
     pub partner_name: String,
     pub conditions: Option<PartnerConfigCondition>,
 }
-#[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
-pub struct PartnerConfigInsert {
-    pub id: String,
-    pub partner_name: String,
-    pub conditions: Option<serde_json::Value>,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, ToSchema, sqlx::FromRow)]
-pub struct NewPartnerConfig {
-    pub partner_name: String,
-    pub conditions: PartnerConfigCondition,
-}
 
 impl PartnerConfig {
     pub fn new(id: String, partner_name: String, conditions: PartnerConfigCondition) -> Self {
