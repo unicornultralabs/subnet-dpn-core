@@ -503,6 +503,25 @@ impl RedisService {
         Ok(())
     }
 
+    pub async fn publish_completed_provider_week(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        self.clone()
+            .publish(
+                DPNRedisKey::get_completed_provide_week_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis completed provider week publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
 
     pub async fn publish_completed_time_per_day(
         self: Arc<Self>,
