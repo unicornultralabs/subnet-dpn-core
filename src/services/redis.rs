@@ -703,6 +703,10 @@ impl DPNRedisKey {
     pub fn get_completed_provider_streak_chan() -> String {
         "completed_provider_streak_updated".to_string()
     }
+    
+    pub fn get_completed_provide_week_chan() -> String {
+        "completed_provide_week_updated".to_string()
+    }
 
     // pub fn get_total_refers_one_time_kf(id: String) -> (String, String) {
     //     ("total_refers_one_time".to_owned(), id)
