@@ -541,6 +541,24 @@ impl RedisService {
         Ok(())
     }
 
+    pub async fn publish_referral_task_tracking(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        self.clone()
+            .publish(
+                DPNRedisKey::get_referral_task_tracking_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis referral task tracking publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
 
     pub async fn publish_completed_time_per_day(
         self: Arc<Self>,
@@ -748,6 +766,10 @@ impl DPNRedisKey {
 
     pub fn get_ref_code_one_time_chan() -> String {
         "ref_code_one_time_updated".to_string()
+    }
+
+    pub fn get_referral_task_tracking_chan() -> String {
+        "referral_task_tracking_updated".to_string()
     }
 
     // pub fn get_total_refers_one_time_kf(id: String) -> (String, String) {
