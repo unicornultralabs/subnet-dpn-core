@@ -484,6 +484,25 @@ impl RedisService {
         Ok(())
     }
 
+    pub async fn publish_input_ref_code_one_time(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        self.clone()
+            .publish(
+                DPNRedisKey::get_ref_code_one_time_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis invite friend one time publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
     pub async fn publish_completed_provider_streak(
         self: Arc<Self>,
         provider: UserTask,
@@ -725,6 +744,10 @@ impl DPNRedisKey {
     
     pub fn get_completed_provide_week_chan() -> String {
         "completed_provide_week_updated".to_string()
+    }
+
+    pub fn get_ref_code_one_time_chan() -> String {
+        "ref_code_one_time_updated".to_string()
     }
 
     // pub fn get_total_refers_one_time_kf(id: String) -> (String, String) {
