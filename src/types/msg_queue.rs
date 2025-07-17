@@ -150,4 +150,5 @@ pub enum NotificationEvent {
 pub struct QuestCompletedExtra{
     pub user_addr: String,
     pub amount: u64,
+    pub amount_u2u: u64,
 }
