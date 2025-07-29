@@ -114,6 +114,15 @@ impl RedisService {
             Err(e) => Err(anyhow!("redis failed to insert err={}", e)),
         }
     }
+    
+    pub fn keys(self: Arc<Self>, pattern: String) -> Result<Vec<String>, Error> {
+        let mut conn = self
+            .client
+            .get_connection()
+            .map_err(|e| anyhow!("cannot get connection err={}", e))?;
+        let keys: Vec<String> = conn.keys(pattern).map_err(|e| anyhow!("redis failed to get keys err={}", e))?;
+        Ok(keys)
+    }
 
     pub fn hset_with_ttl<T>(self: Arc<Self>, key: String, field: String, obj: T, ttl_seconds: u64) -> Result<(), Error>
     where
