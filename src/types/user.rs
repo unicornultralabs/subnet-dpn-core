@@ -17,6 +17,10 @@ pub struct User {
     pub balance: U256,
     pub created_at: i64,
     pub last_login: i64,
+    pub social_media_x: Option<String>,
+    pub social_media_discord: Option<String>,
+    pub social_media_facebook: Option<String>,
+
 }
 
 impl User {
@@ -46,6 +50,9 @@ impl User {
             balance: U256::zero(),
             created_at,
             last_login,
+            social_media_x: None,
+            social_media_discord: None,
+            social_media_facebook: None,
         }
     }
 }
