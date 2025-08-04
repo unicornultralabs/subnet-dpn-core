@@ -68,6 +68,7 @@ pub struct SSORes {
 pub struct RewardSigning {
     pub id: i32,
     pub amount: i32,
+    pub reward_id : i32,
     pub probability: i32,
     pub band_name: String,
     pub stock: i32,
