@@ -444,6 +444,7 @@ impl RedisService {
                 self.clone().hdel(k, f).map_err(|e| anyhow!("{}", e))?;
             }
             ProxyAccChanged::RefreshAll() => { /**/ }
+            ProxyAccChanged::DeletedAlgoProxyAcc(algo_proxy_session_id) => { /**/ }
         }
 
         if let Err(e) = self

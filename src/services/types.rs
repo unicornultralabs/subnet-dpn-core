@@ -21,4 +21,5 @@ pub enum ProxyAccChanged {
     Updated(ProxyAccData),
     Deleted(String), // proxy_acc_id
     RefreshAll(),
+    DeletedAlgoProxyAcc(String), // algo_proxy_session_id
 }
