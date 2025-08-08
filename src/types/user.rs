@@ -17,6 +17,7 @@ pub struct User {
     pub balance: U256,
     pub created_at: i64,
     pub last_login: i64,
+
 }
 
 impl User {

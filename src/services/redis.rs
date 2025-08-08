@@ -7,7 +7,7 @@ use serde::Serialize;
 use std::{collections::HashMap, fmt::Debug, sync::Arc};
 use url::Url;
 
-use crate::types::{bandwidth::UserBandwidthPrice, connection::ProxyAccData};
+use crate::types::{bandwidth::UserBandwidthPrice, connection::ProxyAccData, task::UserTask};
 
 use super::types::{PeerChanged, PeerChangedInfo, ProxyAccChanged};
 
@@ -113,6 +113,15 @@ impl RedisService {
             Ok(_) => Ok(()),
             Err(e) => Err(anyhow!("redis failed to insert err={}", e)),
         }
+    }
+    
+    pub fn keys(self: Arc<Self>, pattern: String) -> Result<Vec<String>, Error> {
+        let mut conn = self
+            .client
+            .get_connection()
+            .map_err(|e| anyhow!("cannot get connection err={}", e))?;
+        let keys: Vec<String> = conn.keys(pattern).map_err(|e| anyhow!("redis failed to get keys err={}", e))?;
+        Ok(keys)
     }
 
     pub fn hset_with_ttl<T>(self: Arc<Self>, key: String, field: String, obj: T, ttl_seconds: u64) -> Result<(), Error>
@@ -391,6 +400,191 @@ impl RedisService {
         Ok(())
     }
 
+    pub async fn publish_first_time_provider(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        let (k, f) = DPNRedisKey::get_first_time_provider_kf(provider.user_addr.clone());
+        self.clone()
+            .hset(k, f, provider.clone())
+            .map_err(|e| anyhow!("redis set first time provider failed err={}", e))?;
+
+        self.clone()
+            .publish(
+                DPNRedisKey::get_first_time_provider_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis first time provider publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
+    pub async fn publish_withdrawal_reward(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        let (k, f) = DPNRedisKey::get_withdrawal_reward_kf(provider.user_addr.clone());
+        self.clone()
+            .hset(k, f, provider.clone())
+            .map_err(|e| anyhow!("redis set withdrawal reward failed err={}", e))?;
+
+        self.clone()
+            .publish(
+                DPNRedisKey::get_withdrawal_reward_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis first time provider publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
+    pub async fn publish_completed_8_hours_ot(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        let (k, f) = DPNRedisKey::get_completed_8_hours_ot_kf(provider.user_addr.clone());
+        self.clone()
+            .hset(k, f, provider.clone())
+            .map_err(|e| anyhow!("redis set completed 8 hours ot failed err={}", e))?;
+
+        self.clone()
+            .publish(
+                DPNRedisKey::get_completed_8_hours_ot_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis completed 8 hours ot publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+    
+
+
+    pub async fn publish_invite_friend_one_time(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        self.clone()
+            .publish(
+                DPNRedisKey::get_invite_friend_one_time_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis invite friend one time publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
+    pub async fn publish_input_ref_code_one_time(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        self.clone()
+            .publish(
+                DPNRedisKey::get_ref_code_one_time_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis invite friend one time publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
+    pub async fn publish_completed_provider_streak(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        self.clone()
+            .publish(
+                DPNRedisKey::get_completed_provider_streak_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis completed provider streak publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
+    pub async fn publish_completed_provider_week(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        self.clone()
+            .publish(
+                DPNRedisKey::get_completed_provide_week_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis completed provider week publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
+    pub async fn publish_referral_task_tracking(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        self.clone()
+            .publish(
+                DPNRedisKey::get_referral_task_tracking_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis referral task tracking publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
+
+    pub async fn publish_completed_time_per_day(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        let (k, f) = DPNRedisKey::get_completed_time_per_day_kf(provider.user_addr.clone());
+        self.clone()
+        .hset(k, f, provider.clone())
+        .map_err(|e| anyhow!("redis set completed time per day failed err={}", e))?;
+        self.clone()
+            .publish(
+                DPNRedisKey::get_completed_time_per_day_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+    }
+
     pub async fn get_peers_price(self: Arc<Self>) -> Result<Vec<UserBandwidthPrice>> {
         let (k, _) = DPNRedisKey::get_price_kf("".to_string());
         let peers = self
@@ -422,6 +616,16 @@ impl RedisService {
             .map_err(|e| anyhow!("failed to remove peers from redis err={}", e))
     }
 
+    /// remove all withdrawal reward in redis cache
+    /// it must be called when admin started
+    /// after removal, withdrawal reward are loaded from db and added to redis
+    pub async fn remove_all_withdrawal_reward(self: Arc<Self>) -> anyhow::Result<()> {
+        let (k, _) = DPNRedisKey::get_withdrawal_reward_kf("".to_owned());
+        self.clone()
+            .del(k)
+            .map_err(|e| anyhow!("failed to remove withdrawal reward from redis err={}", e))
+    }
+    
     pub async fn publish_proxy_acc(
         self: Arc<Self>,
         proxy_acc_changed: ProxyAccChanged,
@@ -516,4 +720,74 @@ impl DPNRedisKey {
     pub fn get_bonus_config_hash_key() -> String {
         "bonus_config".to_string()
     }
+
+    pub fn get_first_time_provider_kf(id: String) -> (String, String) {
+        ("first_time_provider".to_owned(), id)
+    }
+
+    pub fn get_first_time_provider_chan() -> String {
+        "first_time_provider_updated".to_string()
+    }
+
+    pub fn get_withdrawal_reward_kf(id: String) -> (String, String) {
+        ("withdrawal_reward".to_owned(), id)
+    }
+
+    pub fn get_withdrawal_reward_chan() -> String {
+        "withdrawal_reward_updated".to_string()
+    }
+
+    pub fn get_completed_8_hours_ot_kf(id: String) -> (String, String) {
+        ("completed_8_hours_ot".to_owned(), id)
+    }
+
+    pub fn get_completed_8_hours_ot_chan() -> String {
+        "completed_8_hours_dl_updated".to_string()
+    }
+
+    pub fn get_invite_friend_one_time_kf(id: String) -> (String, String) {
+        ("invite_friend_one_time".to_owned(), id)
+    }
+
+    pub fn get_invite_friend_one_time_chan() -> String {
+        "invite_friend_one_time_updated".to_string()
+    }
+
+    pub fn get_completed_time_per_day_kf(id: String) -> (String, String) {
+        ("completed_time_per_day".to_owned(), id)
+    }
+    
+    pub fn get_completed_time_per_day_chan() -> String {
+        "completed_time_per_day_updated".to_string()
+    }
+
+    pub fn get_user_addr_geo_kf(user_addr: String) -> (String, String) {
+        ("user_addr_geo".to_owned(), user_addr)
+    }
+
+    pub fn get_completed_provider_streak_chan() -> String {
+        "completed_provider_streak_updated".to_string()
+    }
+    
+    pub fn get_completed_provide_week_chan() -> String {
+        "completed_provide_week_updated".to_string()
+    }
+
+    pub fn get_ref_code_one_time_chan() -> String {
+        "ref_code_one_time_updated".to_string()
+    }
+
+    pub fn get_referral_task_tracking_chan() -> String {
+        "referral_task_tracking_updated".to_string()
+    }
+
+    // pub fn get_total_refers_one_time_kf(id: String) -> (String, String) {
+    //     ("total_refers_one_time".to_owned(), id)
+    // }
+
+    // pub fn get_total_refers_one_time_chan() -> String {
+    //     "total_refers_one_time_updated".to_string()
+    // }
+
+
 }
