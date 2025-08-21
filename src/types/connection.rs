@@ -65,6 +65,7 @@ pub struct ProxyAccData {
     pub prioritized_ip: Option<String>,
     pub prioritized_ip_level: Option<PrioritizedIPLevel>,
     pub created_at: i64,
+    pub session_timeout: Option<i64>, // Timeout for the session
 }
 
 impl ProxyAccData {
@@ -80,6 +81,7 @@ impl ProxyAccData {
         prioritized_ip: Option<String>,
         prioritized_ip_level: Option<PrioritizedIPLevel>,
         created_at: i64,
+        session_timeout: Option<i64>,
     ) -> Self {
         let mut _self = Self {
             id: "".to_string(),
@@ -94,6 +96,7 @@ impl ProxyAccData {
             prioritized_ip,
             prioritized_ip_level,
             created_at,
+            session_timeout: session_timeout.map(|t| t.clamp(30, 180)), // Clamp between 30-180 seconds
         };
 
         let proto: ProtoProxyAcc = _self.clone().into();
@@ -102,6 +105,13 @@ impl ProxyAccData {
 
         _self.id = bytes_to_hex_string(hash(bz).as_bytes());
         _self
+    }
+
+    /// Get session timeout with validation (30s min, 180s max, default 180s)
+    pub fn get_session_timeout(&self) -> i64 {
+        self.session_timeout
+            .map(|t| t.clamp(30, 180))
+            .unwrap_or(180)
     }
 }
 
