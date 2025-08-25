@@ -61,4 +61,18 @@ pub struct SSORes {
     pub access_token: Option<String>,
     pub refresh_token: Option<String>,
     pub error_msg: String,
+    pub is_first_sign_in: bool,
+    pub reward: Option<RewardSigning>,
+}
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RewardSigning {
+    pub id: i32,
+    pub amount: i32,
+    pub reward_id : i32,
+    pub probability: i32,
+    pub band_name: String,
+    pub stock: i32,
+    pub status: i32,
+    pub created_at: i64,
+    pub updated_at: Option<i64>,
 }
