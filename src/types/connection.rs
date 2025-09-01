@@ -3,7 +3,7 @@ use num_derive::FromPrimitive;
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 use::bitcode::{Decode, Encode};
-use crate::utils::{bytes_to_hex_string, hash::hash};
+use crate::{types::proxy_types::{BanStatus, ProxyStatus, ProxyType}, utils::{bytes_to_hex_string, hash::hash}};
 
 pub const DEFAULT_IP_ROTATION_PERIOD: i64 = 300;
 pub const MAX_INACTIVE_TIME: i64 = 300; // 300 seconds
@@ -65,11 +65,29 @@ pub struct ProxyAccData {
     pub prioritized_ip: Option<String>,
     pub prioritized_ip_level: Option<PrioritizedIPLevel>,
     pub created_at: i64,
+    // ở đây sẽ ko có updated at, vi sẽ sử dụng nó cho việc quyết định khi nào sync data khi request nhie
+    // bây giờ cứ update luôn cũng ko sợ
+    // nên se luôn băng created_at
+    pub updated_at: i64,
     pub session_timeout: Option<i64>, // Timeout for the session
+    // Các field cho algo proxy integration
+    pub username: String, // Username của proxy account
+    pub proxy_type: String, // algo, Enterprise, MMO, Dedicated
+    pub proxy_ip: String, // IP của proxy server/masternode
+    pub proxy_port: String,
+    pub provider_public_ip_address: Option<String>,
+    pub ttl: Option<i32>,
+    pub peer_ipu32: Option<String>,
+    // Các field cho status và ban management
+    pub status: String, // active, inactive, suspended, pending
+    pub ban_status: String, // none, warning, temporary, permanent
+    pub banned_until: Option<String>, // Thời gian hết hạn ban (ISO string)
+    pub ban_reason: Option<String>, // Lý do ban/suspend
 }
 
 impl ProxyAccData {
     pub fn new(
+        username: String,
         password: String,
         ip_rotation_period: i64,
         whitelisted_ip: Option<String>,
@@ -84,7 +102,7 @@ impl ProxyAccData {
         session_timeout: Option<i64>,
     ) -> Self {
         let mut _self = Self {
-            id: "".to_string(),
+            id: username.clone(),
             password,
             ip_rotation_period,
             whitelisted_ip,
@@ -96,7 +114,20 @@ impl ProxyAccData {
             prioritized_ip,
             prioritized_ip_level,
             created_at,
+            updated_at: created_at,
             session_timeout: session_timeout.map(|t| t.clamp(30, 180)), // Clamp between 30-180 seconds
+            // Các field mới - set default values
+            username: username, // Default empty string
+            proxy_type: ProxyType::Enterprise.to_string(), // Default to Enterprise
+            proxy_ip: "".to_string(), // Default empty string
+            proxy_port: "".to_string(), // Default empty string
+            provider_public_ip_address: None,
+            ttl: None,
+            peer_ipu32: None,
+            status: ProxyStatus::Active.to_string(), // Default to active
+            ban_status: BanStatus::None.to_string(), // Default to none
+            banned_until: None,
+            ban_reason: None,
         };
 
         let proto: ProtoProxyAcc = _self.clone().into();
