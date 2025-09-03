@@ -22,3 +22,4 @@ pub mod user_online_point;
 pub mod vpn_user;
 pub mod bonus_config;
 pub mod task;
+pub mod proxy_types;
