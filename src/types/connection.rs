@@ -76,13 +76,13 @@ pub struct ProxyAccData {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_timeout: Option<i64>, // Timeout for the session
     // Các field cho algo proxy integration
-    #[serde(skip_serializing_if = "String::is_empty")]
+    #[serde(skip_serializing_if = "String::is_empty", default)]
     pub username: String, // Username của proxy account
-    #[serde(skip_serializing_if = "String::is_empty")]
+    #[serde(skip_serializing_if = "String::is_empty", default)]
     pub proxy_type: String, // algo, Enterprise, MMO, Dedicated
-    #[serde(skip_serializing_if = "String::is_empty")]
+    #[serde(skip_serializing_if = "String::is_empty", default)]
     pub proxy_ip: String, // IP của proxy server/masternode
-    #[serde(skip_serializing_if = "String::is_empty")]
+    #[serde(skip_serializing_if = "String::is_empty", default)]
     pub proxy_port: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_public_ip_address: Option<String>,
@@ -91,9 +91,9 @@ pub struct ProxyAccData {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub peer_ipu32: Option<u32>,
     // Các field cho status và ban management
-    #[serde(skip_serializing_if = "String::is_empty")]
+    #[serde(skip_serializing_if = "String::is_empty", default)]
     pub status: String, // active, inactive, suspended, pending
-    #[serde(skip_serializing_if = "String::is_empty")]
+    #[serde(skip_serializing_if = "String::is_empty", default)]
     pub ban_status: String, // none, warning, temporary, permanent
     #[serde(skip_serializing_if = "Option::is_none")]
     pub banned_until: Option<String>, // Thời gian hết hạn ban (ISO string)
