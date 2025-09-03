@@ -56,32 +56,48 @@ pub struct ProxyAccData {
     pub id: String,
     pub password: String,
     pub ip_rotation_period: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub whitelisted_ip: Option<String>,
     pub user_addr: String,
     pub country_geoname_id: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub city_geoname_id: Option<i64>,
     pub rate_per_kb: i64,
     pub rate_per_second: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub prioritized_ip: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub prioritized_ip_level: Option<PrioritizedIPLevel>,
     pub created_at: i64,
     // ở đây sẽ ko có updated at, vi sẽ sử dụng nó cho việc quyết định khi nào sync data khi request nhie
     // bây giờ cứ update luôn cũng ko sợ
     // nên se luôn băng created_at
     pub updated_at: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub session_timeout: Option<i64>, // Timeout for the session
     // Các field cho algo proxy integration
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub username: String, // Username của proxy account
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub proxy_type: String, // algo, Enterprise, MMO, Dedicated
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub proxy_ip: String, // IP của proxy server/masternode
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub proxy_port: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_public_ip_address: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ttl: Option<i32>,
-    pub peer_ipu32: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub peer_ipu32: Option<u32>,
     // Các field cho status và ban management
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub status: String, // active, inactive, suspended, pending
+    #[serde(skip_serializing_if = "String::is_empty")]
     pub ban_status: String, // none, warning, temporary, permanent
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub banned_until: Option<String>, // Thời gian hết hạn ban (ISO string)
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ban_reason: Option<String>, // Lý do ban/suspend
 }
 
