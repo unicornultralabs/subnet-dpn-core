@@ -146,11 +146,13 @@ impl ProxyAccData {
             ban_reason: None,
         };
 
-        let proto: ProtoProxyAcc = _self.clone().into();
-        let binding = ::prost::Message::encode_to_vec(&proto);
-        let bz = binding.as_slice();
-
-        _self.id = bytes_to_hex_string(hash(bz).as_bytes());
+    
+        // Sử dụng username làm ID trực tiếp thay vì hash 
+        // user_4u28Lt1EuWqo nó là quá đủ cho 18 tỉ user tỉ lệ trùng rất thấp
+        // let proto: ProtoProxyAcc = _self.clone().into();
+        // let binding = ::prost::Message::encode_to_vec(&proto);
+        // let bz: &[u8] = binding.as_slice();
+        // _self.id = bytes_to_hex_string(hash(bz).as_bytes());
         _self
     }
 
