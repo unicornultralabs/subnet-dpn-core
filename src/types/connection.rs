@@ -105,6 +105,7 @@ impl ProxyAccData {
     pub fn new(
         username: String,
         password: String,
+        proxy_type: String,
         ip_rotation_period: i64,
         whitelisted_ip: Option<String>,
         user_addr: String,
@@ -134,7 +135,7 @@ impl ProxyAccData {
             session_timeout: session_timeout.map(|t| t.clamp(30, 180)), // Clamp between 30-180 seconds
             // Các field mới - set default values
             username: username, // Default empty string
-            proxy_type: ProxyType::Enterprise.to_string(), // Default to Enterprise
+            proxy_type: proxy_type,
             proxy_ip: "".to_string(), // Default empty string
             proxy_port: "".to_string(), // Default empty string
             provider_public_ip_address: None,
@@ -146,8 +147,7 @@ impl ProxyAccData {
             ban_reason: None,
         };
 
-    
-        // Sử dụng username làm ID trực tiếp thay vì hash 
+        // Sử dụng username làm ID trực tiếp thay vì hash
         // user_4u28Lt1EuWqo nó là quá đủ cho 18 tỉ user tỉ lệ trùng rất thấp
         // let proto: ProtoProxyAcc = _self.clone().into();
         // let binding = ::prost::Message::encode_to_vec(&proto);
