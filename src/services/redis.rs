@@ -549,6 +549,24 @@ impl RedisService {
             })?;
         Ok(())
     }
+    pub async fn publish_giga_jackpot_provider_eligibility_completed_uptime_10h_per_week(
+        self: Arc<Self>,
+        provider: UserTask,
+    ) -> anyhow::Result<()> {
+        self.clone()
+            .publish(
+                DPNRedisKey::get_giga_jackpot_provider_eligibility_completed_uptime_10h_per_week_chan(),
+                serde_json::to_string(&provider).unwrap(),
+            )
+            .await
+            .map_err(|e| {
+                anyhow!(
+                    "redis giga jackpot provider eligibility completed uptime 10h per week publish failed err={}",
+                    e
+                )
+            })?;
+        Ok(())
+    }
 
     pub async fn publish_referral_task_tracking(
         self: Arc<Self>,
@@ -781,6 +799,9 @@ impl DPNRedisKey {
         "referral_task_tracking_updated".to_string()
     }
 
+    pub fn get_giga_jackpot_provider_eligibility_completed_uptime_10h_per_week_chan() -> String {
+        "giga_jackpot_provider_eligibility_completed_uptime_10h_per_week_updated".to_string()
+    }
     // pub fn get_total_refers_one_time_kf(id: String) -> (String, String) {
     //     ("total_refers_one_time".to_owned(), id)
     // }
