@@ -90,6 +90,9 @@ pub struct ProxyAccData {
     pub ttl: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub peer_ipu32: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub proxy_domain: Option<String>,
+
     // Các field cho status và ban management
     #[serde(skip_serializing_if = "String::is_empty", default)]
     pub status: String, // active, inactive, suspended, pending
@@ -138,6 +141,7 @@ impl ProxyAccData {
             proxy_type: proxy_type,
             proxy_ip: "".to_string(), // Default empty string
             proxy_port: "".to_string(), // Default empty string
+            proxy_domain: None,
             provider_public_ip_address: None,
             ttl: None,
             peer_ipu32: None,
