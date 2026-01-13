@@ -40,6 +40,7 @@ pub const SESSION_ROUTING_KEY: &str = "session";
 pub const TXS_ROUTING_KEY: &str = "txs";
 pub const TAPPOINT_EVENT_ROUTING_KEY: &str = "tappoint";
 pub const NOTIFICATION_REGISTER_ROUTING_KEY: &str = "register";
+pub const QUEST_ROUTING_KEY: &str = "quest";
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 
@@ -56,6 +57,9 @@ pub enum DPNEvent {
     Deposit(DepositExtra),
     Withdrawal(WithdrawalExtra),
     Referral(ReferralExtra),
+
+    // quest
+    QuestCompleted(QuestCompletedExtra),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -140,4 +144,11 @@ pub enum DPNTx {
 #[derive(Debug, Clone, Serialize)]
 pub enum NotificationEvent {
     Register(NotificationRegister),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct QuestCompletedExtra{
+    pub user_addr: String,
+    pub amount: u64,
+    pub amount_u2u: u64,
 }
